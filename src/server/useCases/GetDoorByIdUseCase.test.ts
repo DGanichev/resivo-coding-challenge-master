@@ -5,6 +5,8 @@ import { DoorDto } from '@/__mocks__/dtos/DoorDto';
 import { DoorRepository } from '@/server/repositories/DoorRepository';
 import { BuildingRepository } from '@/server/repositories/BuildingRepository';
 import { GetDoorByIdUseCase } from './GetDoorByIdUseCase';
+import { ApartmentRepository } from '@/server/repositories/ApartmentRepository';
+import { ApartmentDto } from '@/__mocks__/dtos/ApartmentDto';
 
 const buildingDto: BuildingDto = {
   id: '63f4e0797e85310fee059022',
@@ -14,13 +16,21 @@ const buildingDto: BuildingDto = {
   city: 'Zurich',
 };
 
+const apartmentDto: ApartmentDto = {
+  id: '63f4e2825abc011556da74af',
+  name: 'Apartment 1.1',
+  floor: 1,
+  building_id: buildingDto.id,
+};
+
 const doorDto: DoorDto = {
-  id: '63f4d82ef04826419cc6eaeb',
-  name: 'Building Main Entrance',
+  id: '63f4d8a8e431d9664f409ca4',
+  name: 'Apartment Main Door',
   connection_type: 'wired',
   connection_status: 'online',
-  last_connection_status_update: '2023-02-22T22:01:47.573Z',
+  last_connection_status_update: '2023-02-22T04:03:50.911Z',
   building_id: buildingDto.id,
+  apartment_id: apartmentDto.id,
 };
 
 describe('GetDoorByIdUseCase', () => {
@@ -40,10 +50,15 @@ describe('GetDoorByIdUseCase', () => {
       .spyOn(BuildingRepository.prototype, 'getBuildingById')
       .mockImplementation(() => Promise.resolve(buildingDto));
 
+    const getApartmentByIdSpy = jest
+      .spyOn(ApartmentRepository.prototype, 'getApartmentById')
+      .mockImplementation(() => Promise.resolve(apartmentDto));
+
     await getDoorByIdUseCase.execute({ doorId: doorDto.id });
 
     expect(getDoorByIdSpy).toHaveBeenNthCalledWith(1, doorDto.id);
     expect(getBuildingByIdSpy).toHaveBeenNthCalledWith(1, buildingDto.id);
+    expect(getApartmentByIdSpy).toHaveBeenNthCalledWith(1, apartmentDto.id);
   });
 
   it('should throw if no door could be found', async () => {

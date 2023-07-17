@@ -28,10 +28,16 @@ describe('ApartmentRepository', () => {
       expect(apartment).toEqual(expectedApartment);
     });
 
-    it('should return undefined if apartment id does not exist', async () => {
+    it('should return undefined if apartment is not found', async () => {
       const apartment = await apartmentRepository.getApartmentById(
         '63f868e9992108ce4f0c0a44',
       );
+
+      expect(apartment).toBeUndefined();
+    });
+
+    it('should return undefined if id param is empty', async () => {
+      const apartment = await apartmentRepository.getApartmentById('');
 
       expect(apartment).toBeUndefined();
     });
