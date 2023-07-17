@@ -3,6 +3,7 @@ import { useCallback } from 'react';
 import { Door } from '@/models/Door';
 import { DataGrid, GridColDef, GridRowParams } from '@mui/x-data-grid';
 import Typography from '@mui/material/Typography';
+import { CONNECTION_STATUSES_COLORS } from '@/ui/constants/ConnectionStatusesColors';
 
 interface DoorListProps {
   doors: Door[];
@@ -35,7 +36,8 @@ const columns: GridColDef<Door>[] = [
     flex: 1,
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     renderCell: ({ row: door }) => {
-      return <Typography color="success.main">online</Typography>;
+      const color = CONNECTION_STATUSES_COLORS[door.connectionStatus];
+      return <Typography color={color}>{door.connectionStatus}</Typography>;
     },
   },
 ];
